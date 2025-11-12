@@ -34,4 +34,63 @@
     <div class="checkbox-group">
       <label><input type="checkbox" name="problema" value="Sedentarismo"> Sedentarismo</label><br>
       <label><input type="checkbox" name="problema" value="Riesgo de caídas"> Riesgo de caídas</label><br>
-      <label><input type="checkbox" name="problema" value="Riesgo desnutrición"> Ries
+      <label><input type="checkbox" name="problema" value="Riesgo desnutrición"> Riesgo desnutrición</label><br>
+      <label><input type="checkbox" name="problema" value="Incontinencia"> Incontinencia</label><br>
+      <label><input type="checkbox" name="problema" value="Alteración sueño"> Alteración sueño</label>
+    </div>
+    <button type="button" onclick="nextPage(2)">Anterior</button>
+    <button type="button" onclick="generatePDFs()">Generar PDFs</button>
+  </div></form><script>
+function nextPage(pageNum) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page' + pageNum).classList.add('active');
+}
+
+function generatePDFs() {
+  const { jsPDF } = window.jspdf;
+
+  // Recoger datos
+  const diagnosticos = Array.from(document.querySelectorAll('input[name="diagnostico"]:checked')).map(cb => cb.value);
+  const problemas = Array.from(document.querySelectorAll('input[name="problema"]:checked')).map(cb => cb.value);
+  const tratamientos = document.getElementById('tratamientos').value;
+
+  // PDF 1: Resumen
+  let doc1 = new jsPDF();
+  doc1.setFontSize(14);
+  doc1.text("Resumen del paciente", 10, 20);
+  doc1.setFontSize(12);
+  doc1.text("Diagnósticos: " + (diagnosticos.join(", ") || "Ninguno"), 10, 40);
+  doc1.text("Tratamientos: " + (tratamientos || "Ninguno"), 10, 50);
+  doc1.text("Problemas: " + (problemas.join(", ") || "Ninguno"), 10, 60);
+  doc1.save('Resumen_Paciente.pdf');
+
+  // PDF 2: Recomendaciones enfermera
+  let doc2 = new jsPDF();
+  doc2.setFontSize(14);
+  doc2.text("Recomendaciones para la enfermera", 10, 20);
+  doc2.setFontSize(12);
+  diagnosticos.forEach((d,i)=>{
+    doc2.text(`- ${d}: Revisar según protocolo clínico`, 10, 40 + i*10);
+  });
+  problemas.forEach((p,i)=>{
+    doc2.text(`- ${p}: Seguimiento enfermero`, 10, 40 + (diagnosticos.length + i)*10);
+  });
+  doc2.save('Recomendaciones_Enfermera.pdf');
+
+  // PDF 3: Consejos paciente
+  let doc3 = new jsPDF();
+  doc3.setFontSize(14);
+  doc3.text("Consejos para el paciente", 10, 20);
+  doc3.setFontSize(12);
+  diagnosticos.forEach((d,i)=>{
+    doc3.text(`• ${d}: seguir indicaciones médicas`, 10, 40 + i*10);
+  });
+  problemas.forEach((p,i)=>{
+    doc3.text(`• ${p}: medidas preventivas recomendadas`, 10, 40 + (diagnosticos.length + i)*10);
+  });
+  doc3.save('Consejos_Paciente.pdf');
+
+  alert("PDFs generados correctamente!");
+}
+</script></body>
+</html>
