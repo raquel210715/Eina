@@ -1,0 +1,37 @@
+<!DOCTYPE html><html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Herramienta Enfermería</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+  body { font-family: Arial, sans-serif; padding: 20px; max-width: 600px; margin: auto; }
+  .page { display: none; }
+  .active { display: block; }
+  h2 { margin-bottom: 10px; }
+  button { margin-top: 20px; padding: 10px 20px; }
+  .checkbox-group { margin-bottom: 15px; }
+</style>
+</head>
+<body><h1>Herramienta Enfermería</h1><form id="formWizard">  <!-- Página 1: Diagnósticos -->  <div class="page active" id="page1">
+    <h2>Diagnósticos clínicos</h2>
+    <div class="checkbox-group">
+      <label><input type="checkbox" name="diagnostico" value="HTA"> HTA</label><br>
+      <label><input type="checkbox" name="diagnostico" value="DM2"> DM2</label><br>
+      <label><input type="checkbox" name="diagnostico" value="Alzheimer"> Alzheimer</label><br>
+      <label><input type="checkbox" name="diagnostico" value="EPOC"> EPOC</label><br>
+      <label><input type="checkbox" name="diagnostico" value="Insuficiencia cardíaca"> Insuficiencia cardíaca</label>
+    </div>
+    <button type="button" onclick="nextPage(2)">Siguiente</button>
+  </div>  <!-- Página 2: Tratamientos -->  <div class="page" id="page2">
+    <h2>Tratamientos</h2>
+    <textarea id="tratamientos" rows="5" style="width:100%;" placeholder="Escribe los medicamentos y dosis aquí..."></textarea>
+    <br>
+    <button type="button" onclick="nextPage(1)">Anterior</button>
+    <button type="button" onclick="nextPage(3)">Siguiente</button>
+  </div>  <!-- Página 3: Problemas de salud -->  <div class="page" id="page3">
+    <h2>Problemas de salud / factores de riesgo</h2>
+    <div class="checkbox-group">
+      <label><input type="checkbox" name="problema" value="Sedentarismo"> Sedentarismo</label><br>
+      <label><input type="checkbox" name="problema" value="Riesgo de caídas"> Riesgo de caídas</label><br>
+      <label><input type="checkbox" name="problema" value="Riesgo desnutrición"> Ries
