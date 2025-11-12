@@ -54,40 +54,46 @@ function generatePDFs() {
   const problemas = Array.from(document.querySelectorAll('input[name="problema"]:checked')).map(cb => cb.value);
   const tratamientos = document.getElementById('tratamientos').value;
 
+  const lineHeight = 10;
+
   // PDF 1: Resumen
   let doc1 = new jsPDF();
-  doc1.setFontSize(14);
+  doc1.setFontSize(16);
   doc1.text("Resumen del paciente", 10, 20);
   doc1.setFontSize(12);
-  doc1.text("Diagnósticos: " + (diagnosticos.join(", ") || "Ninguno"), 10, 40);
-  doc1.text("Tratamientos: " + (tratamientos || "Ninguno"), 10, 50);
-  doc1.text("Problemas: " + (problemas.join(", ") || "Ninguno"), 10, 60);
+  let y = 40;
+  doc1.text("Diagnósticos:", 10, y); y += lineHeight;
+  diagnosticos.forEach(d => { doc1.text(`• ${d}`, 12, y); y += lineHeight; });
+  if(diagnosticos.length === 0){ doc1.text("• Ninguno", 12, y); y += lineHeight; }
+
+  doc1.text("Tratamientos:", 10, y); y += lineHeight;
+  if(tratamientos.trim() !== ''){
+    tratamientos.split('\n').forEach(line => { doc1.text(`• ${line}`, 12, y); y += lineHeight; });
+  } else { doc1.text("• Ninguno", 12, y); y += lineHeight; }
+
+  doc1.text("Problemas:", 10, y); y += lineHeight;
+  problemas.forEach(p => { doc1.text(`• ${p}`, 12, y); y += lineHeight; });
+  if(problemas.length === 0){ doc1.text("• Ninguno", 12, y); y += lineHeight; }
   doc1.save('Resumen_Paciente.pdf');
 
   // PDF 2: Recomendaciones enfermera
   let doc2 = new jsPDF();
-  doc2.setFontSize(14);
+  doc2.setFontSize(16);
   doc2.text("Recomendaciones para la enfermera", 10, 20);
   doc2.setFontSize(12);
-  diagnosticos.forEach((d,i)=>{
-    doc2.text(`- ${d}: Revisar según protocolo clínico`, 10, 40 + i*10);
-  });
-  problemas.forEach((p,i)=>{
-    doc2.text(`- ${p}: Seguimiento enfermero`, 10, 40 + (diagnosticos.length + i)*10);
-  });
+  y = 40;
+  diagnosticos.forEach(d => { doc2.text(`• ${d}: Revisar según protocolo clínico`, 10, y); y += lineHeight; });
+  problemas.forEach(p => { doc2.text(`• ${p}: Seguimiento enfermero`, 10, y); y += lineHeight; });
   doc2.save('Recomendaciones_Enfermera.pdf');
 
   // PDF 3: Consejos paciente
   let doc3 = new jsPDF();
-  doc3.setFontSize(14);
+  doc3.setFontSize(16);
   doc3.text("Consejos para el paciente", 10, 20);
   doc3.setFontSize(12);
-  diagnosticos.forEach((d,i)=>{
-    doc3.text(`• ${d}: seguir indicaciones médicas`, 10, 40 + i*10);
-  });
-  problemas.forEach((p,i)=>{
-    doc3.text(`• ${p}: medidas preventivas recomendadas`, 10, 40 + (diagnosticos.length + i)*10);
-  });
+  y = 40;
+  diagnosticos.forEach(d => { doc3.text(`• ${d}: seguir indicaciones médicas`, 10, y); y += lineHeight; });
+  problemas.forEach(p => { doc3.text(`• ${p}: medidas preventivas recomendadas`, 10, y); y += lineHeight; });
   doc3.save('Consejos_Paciente.pdf');
 
   alert("PDFs generados correctamente!");
